@@ -39,8 +39,9 @@
     const TOGGLE_TODO = 'TOGGLE_TODO'
     const ADD_GOAL = 'ADD_GOAL'
     const REMOVE_GOAL = 'REMOVE_GOAL'
+    const RECEIVE_DATA = 'RECEIVE_DATA'
 
-
+    // Action Creators //
     function addTodoAction (todo) {
       return {
         type: ADD_TODO,
@@ -73,7 +74,15 @@
       }
     }
 
+    function receiveDataAction (todos, goals) {
+      return {
+        type: RECEIVE_DATA,
+        todos,
+        goals
+      }
+    }
 
+    // Reducers
     function todos (state = [], action) {
        switch(action.type) {
          case ADD_TODO :
@@ -83,6 +92,8 @@
          case TOGGLE_TODO :
            return state.map((todo) => todo.id !== action.id ? todo :
              Object.assign({}, todo, { complete: !todo.complete }))
+         case RECEIVE_DATA :
+            return action.todos
          default :
            return state
        }
@@ -94,11 +105,24 @@
           return state.concat([action.goal])
         case REMOVE_GOAL :
           return state.filter((goal) => goal.id !== action.id)
+        case RECEIVE_DATA :
+             return action.goals
         default :
           return state
       }
     }
 
+    function loading (state = true, action) {
+      switch(action.type) {
+          case RECEIVE_DATA :
+            return false
+          default :
+            return state
+        }
+      }
+
+
+    // Middleware
     const checker = (store) => (next) => (action) => {
       if (
         action.type === ADD_TODO &&
@@ -126,7 +150,7 @@
 
     // Store //
     const store = Redux.createStore(
-        Redux.combineReducers({ todos, goals }),
+        Redux.combineReducers({ todos, goals, loading }),
         Redux.applyMiddleware(checker, logger)
     )
 
@@ -234,8 +258,17 @@
 
       componentDidMount () {
          const { store } = this.props
+
+         Promise.all([
+             API.fetchTodos(),
+             API.fetchGoals()
+           ]).then(([ todos, goals ]) => {
+             store.dispatch(receiveDataAction(todos, goals))
+           })
+
          store.subscribe(() => this.forceUpdate())
       }
+
       // Subscribe -> Adds a change listener.
       // It will be called any time an action is dispatched,
       // and some part of the state tree may potentially have changed.
@@ -243,7 +276,11 @@
        render() {
 
          const {store} = this.props
-         const {todos, goals} = store.getState()
+         const {todos, goals, loading} = store.getState()
+
+         if (loading === true) {
+           return <h3>Loading...</h3>
+          }
 
           return (
             <div>
