@@ -1,4 +1,4 @@
-import 'React' from 'react'
+import React from 'react'
 
 export default function List (props) {
   return (
@@ -8,7 +8,7 @@ export default function List (props) {
           <span
             onClick={() => props.toggle && props.toggle(item.id)}
             style={{textDecoration: item.complete ? 'line-through' : 'none'}}>
-            {item.name}
+              {item.name}
           </span>
           <button onClick={() => props.remove(item)}>
             X

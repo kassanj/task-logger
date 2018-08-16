@@ -7,5 +7,5 @@ import loading from './loading'
 export default combineReducers({
   todos,
   goals,
-  loading
+  loading,
 })

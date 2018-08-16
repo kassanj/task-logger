@@ -9,7 +9,7 @@ import {
 
 
 // Reducers
-export function goals (state = [], action) {
+export default function goals (state = [], action) {
   switch(action.type) {
     case ADD_GOAL :
       return state.concat([action.goal])

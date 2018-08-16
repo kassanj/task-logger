@@ -1,10 +1,12 @@
-import { RECEIVE_DATA } from '../actions/shared'
+import {
+  RECEIVE_DATA
+} from '../actions/shared'
 
-export function loading (state = true, action) {
+export default function loading (state = true, action) {
   switch(action.type) {
-      case RECEIVE_DATA :
-        return false
-      default :
-        return state
+    case RECEIVE_DATA :
+      return false
+    default :
+      return state
   }
 }

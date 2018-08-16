@@ -16,7 +16,7 @@ class App extends React.Component {
   // and some part of the state tree may potentially have changed.
    render() {
 
-     if (loading === true) {
+     if (this.props.loading === true) {
        return <h3>Loading...</h3>
      }
 
