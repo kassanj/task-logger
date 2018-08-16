@@ -3,6 +3,10 @@ import {
   REMOVE_GOAL
 } from '../actions/goals'
 
+import {
+  RECEIVE_DATA
+} from '../actions/shared'
+
 
 // Reducers
 export function goals (state = [], action) {

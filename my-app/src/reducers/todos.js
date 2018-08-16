@@ -4,6 +4,10 @@ import {
   TOGGLE_TODO
 } from '../actions/todos'
 
+import {
+  RECEIVE_DATA
+} from '../actions/shared'
+
 
 // Reducers
 export function todos (state = [], action) {
